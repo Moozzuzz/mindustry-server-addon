@@ -1,0 +1,5 @@
+#!/command/execlineb -P
+# Service initialization script
+multisubstitute { }
+backtick -n 1 { s6-echo "Initializing app services" }
+s6-echo $1
