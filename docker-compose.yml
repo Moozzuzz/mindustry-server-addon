@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  mindustry-server:
+    build:
+      context: .
+      dockerfile: example/Dockerfile
+      args:
+        BUILD_ARCH: amd64
+        BUILD_DATE: ${BUILD_DATE:-2024-01-15}
+        BUILD_DESCRIPTION: Mindustry game server with Home Assistant integration
+        BUILD_NAME: Mindustry Server
+        BUILD_REF: main
+        BUILD_REPOSITORY: Moozzuzz/mindustry-server-addon
+        BUILD_VERSION: ${VERSION:-1.0.0}
+    container_name: mindustry-server
+    ports:
+      - "6567:6567/udp"  # Mindustry server port (UDP)
+      - "5000:5000"      # API server port (HTTP)
+    volumes:
+      - mindustry_data:/data
+      - mindustry_maps:/mindustry/maps
+      - mindustry_logs:/data/logs
+    environment:
+      - PORT=6567
+      - SERVER_NAME=Mindustry Server
+      - MAX_PLAYERS=10
+      - LOG_LEVEL=info
+      - PVP=false
+      - STRICT=false
+      - AUTO_RESTART=true
+      - RESTART_HOUR=3
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bash", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - mindustry-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+        labels: "mindustry.server=true"
+
+volumes:
+  mindustry_data:
+    driver: local
+  mindustry_maps:
+    driver: local
+  mindustry_logs:
+    driver: local
+
+networks:
+  mindustry-network:
+    driver: bridge

@@ -1,0 +1,4 @@
+#!/command/with-contenv bashio
+# Service script - runs main addon startup
+
+exec /usr/bin/start-server.sh

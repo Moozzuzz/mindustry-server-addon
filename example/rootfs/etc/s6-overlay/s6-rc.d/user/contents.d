@@ -1,0 +1,1 @@
+addon-main init-addon

@@ -1,0 +1,6 @@
+#!/command/execlineb -P
+# Service initialization script for S6 overlay
+# This runs before services are started
+
+multisubstitute { }
+s6-echo "Initializing Mindustry Server addon services"
