@@ -1,5 +1,5 @@
 #!/bin/bash
-# Health check script for Mindustry Server addon
+# Health check script for Mindustry App
 
 set -e
 
